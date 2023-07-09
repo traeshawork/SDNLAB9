@@ -1,6 +1,7 @@
 import os
 from netmiko import ConnectHandler
 from getpass import getpass
+from netmiko.exception import AuthenticationException
 
 USERNAME = input("Please enter your SSH username: ")
 PASS = getpass("Please enter your SSH password: ")
@@ -12,7 +13,11 @@ device = {
     'device_type': 'cisco_ios'
 }
 
-c = ConnectHandler(**device)
+try:
+    c = ConnectHandler(**device)
+except(AuthenticationException):
+    print("An Authentication error occered while trying to connect to: " + device [ip])
+    
 
 output = c.send_command('show run')
 
